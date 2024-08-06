@@ -1,0 +1,60 @@
+[
+	{
+		type:"menu",
+		menu: {
+    path: '/flow',
+    name: 'flow',
+    component: "^Layout^",
+    redirect: '/flow/index',
+    meta: {
+      title: '流程中心',
+      single: true
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: "^() => import('@/pages/process/center/index.vue')^",
+        meta: {
+          title: '发起流程'
+        }
+      },
+      {
+        path: 'handleBis',
+        name: 'handleBis',
+        component: "^() => import('@/pages/process/center/handleBis/index.vue')^",
+        meta: {
+          title: '流程办理',
+          hidden: true
+        }
+      },
+      {
+        path: 'handleList',
+        name: 'handleList',
+        props: { status: 'ACTIVE', opName: '办理' },
+        component: "^() => import('@/pages/process/center/handle/active.vue')^",
+        meta: {
+          title: '我的待办'
+        }
+      },
+      {
+        path: 'handledList',
+        name: 'handledList',
+        props: { status: 'COMPLETE', opName: '查看' },
+        component: "^() => import('@/pages/process/center/handle/complete.vue')^",
+        meta: {
+          title: '我的已办'
+        }
+      },
+      {
+        path: 'starter',
+        name: 'starter',
+        component: "^() => import('@/pages/process/center/starter/index.vue')^",
+        meta: {
+          title: '我的申请'
+        }
+      }
+    ]
+  }
+	}
+]

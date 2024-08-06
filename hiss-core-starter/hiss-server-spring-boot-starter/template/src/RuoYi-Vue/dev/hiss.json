@@ -1,0 +1,33 @@
+[
+	{
+		type:"menu",
+		menu: {
+    path: '/design',
+    component: "^Layout^",
+    redirect: 'index',
+    meta: { title: '流程管理', icon: 'excel', "noCache": false},
+    children: [
+      {
+        path: 'designDevList',
+        component: "^() => import('@/views/process/center/design/devList')^",
+        name: 'DesignDevList',
+        meta: { title: '开发流程', icon: 'code', "noCache": false}
+      },
+      {
+        path: 'designDevEdit',
+        component: "^() => import('@/views/process/center/design/designDevEdit')^",
+        hidden:true,
+        name: 'DesignDevEdit',
+        meta: { title: '[编辑]开发流程', icon: 'dashboard', "noCache": true}
+      },
+      {
+        path: 'designDevAdd',
+        component: "^() => import('@/views/process/center/design/designDevAdd')^",
+        hidden:true,
+        name: 'DesignDevAdd',
+        meta: { title: '[新增]开发流程', icon: 'dashboard', "noCache": true}
+      }
+     ]
+  }
+	 }
+]

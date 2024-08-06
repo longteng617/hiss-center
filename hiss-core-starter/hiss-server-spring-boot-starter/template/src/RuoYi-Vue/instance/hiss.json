@@ -1,0 +1,26 @@
+[
+  {
+    type:"menu",
+    menu: {
+    path: '/design',
+    component: "^Layout^",
+    redirect: 'index',
+    meta: { title: '流程管理', icon: 'excel', "noCache": false},
+    children: [
+      {
+        path: 'instance',
+        component: "^() => import('@/views/process/center/instance/index')^",
+        name: 'Instance',
+        meta: { title: '流程实例', icon: 'component', "noCache": false}
+      },
+      {
+        path: 'instanceHandle',
+        component: "^() => import('@/views/process/center/instance/handleBis')^",
+        hidden:true,
+        name: 'InstanceHandle',
+        meta: { title: '流程查看', icon: 'component', "noCache": false}
+      }
+    ]
+  }
+   }
+]

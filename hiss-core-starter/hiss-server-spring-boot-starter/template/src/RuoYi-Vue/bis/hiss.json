@@ -1,0 +1,33 @@
+[
+	{
+		type:"menu",
+		menu: {
+    path: '/design',
+    component: "^Layout^",
+    redirect: 'index',
+    meta: { title: '流程管理', icon: 'excel', "noCache": false},
+    children: [
+      {
+        path: 'designBisList',
+        component: "^() => import('@/views/process/center/design/bisList')^",
+        name: 'DesignBis',
+        meta: { title: '业务流程', icon: 'people', "noCache": false}
+      },
+      {
+        path: 'designBisAdd',
+        component: "^() => import('@/views/process/center/design/designBisAdd')^",
+        hidden:true,
+        name: 'DesignBisAdd',
+        meta: { title: '[新增]业务流程', icon: 'dashboard', "noCache": true}
+      },
+      {
+        path: 'designBisEdit',
+        component: "^() => import('@/views/process/center/design/designBisEdit')^",
+        hidden:true,
+        name: 'DesignBisEdit',
+        meta: { title: '[编辑]业务流程', icon: 'dashboard', "noCache": true}
+      }
+    ]
+  }
+	 }
+]

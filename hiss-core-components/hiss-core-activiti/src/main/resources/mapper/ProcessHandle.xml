@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.hiss.process.activiti.mapper.ProcessHandleMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="ProcessInstanceMap" type="cn.itcast.hiss.message.sys.pojo.ProcessInstance">
+        <result column="id_" property="id"/>
+        <result column="PROC_INST_ID_" property="procInstId"/>
+        <result column="BUSINESS_KEY_" property="businessKey"/>
+        <result column="proc_def_id_" property="procDefId"/>
+        <result column="START_TIME_" property="startTime"/>
+        <result column="END_TIME_" property="endTime"/>
+        <result column="duration" property="duration"/>
+        <result column="START_USER_ID_" property="startUserId"/>
+        <result column="delete_reason_" property="deleteReason"/>
+        <result column="TENANT_ID_" property="tenantId"/>
+        <result column="name_" property="name"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <!-- 获取待办的任务 -->
+    <select id="activeStatusList" resultMap="ProcessInstanceMap">
+        SELECT e.id_,e.PROC_INST_ID_,e.BUSINESS_KEY_,e.proc_def_id_,e.START_TIME_, NULL as END_TIME_, NULL as duration_,
+        e.START_USER_ID_,'' as delete_reason_,e.TENANT_ID_,e.name_,
+        'ACTIVE' as status
+        FROM act_hi_procinst e
+        <where>e.id_ IN (SELECT DISTINCT a.PROC_INST_ID_ FROM act_ru_task a LEFT JOIN act_ru_identitylink d ON
+            a.PROC_INST_ID_ = d.PROC_INST_ID_
+            <where> 1=1
+                <if test="tenantId != null and tenantId != ''">
+                    AND a.TENANT_ID_ = #{tenantId}
+                </if>
+                 <if test="startUserId != null and startUserId != ''">
+                    AND d.USER_ID_ = #{startUserId}
+                </if>
+            </where>
+            and ((a.assignee_ is not null
+            and a.assignee_ = d.USER_ID_)
+            or a.assignee_ is null)
+            )
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+        </where>
+        ORDER BY e.start_time_ desc limit #{page},#{size}
+    </select>
+    <select id="activeStatusTotal" resultType="long">
+        SELECT count(1)
+        FROM act_hi_procinst e
+        <where>e.id_ IN (SELECT DISTINCT a.PROC_INST_ID_ FROM act_ru_task a LEFT JOIN act_ru_identitylink d ON
+            a.PROC_INST_ID_ = d.PROC_INST_ID_
+            <where>
+                1=1
+                <if test="tenantId != null and tenantId != ''">
+                    AND a.TENANT_ID_ = #{tenantId}
+                </if>
+                 <if test="startUserId != null and startUserId != ''">
+                    AND d.USER_ID_ = #{startUserId}
+                </if>
+            </where>
+            and ((a.assignee_ is not null
+            and a.assignee_ = d.USER_ID_)
+            or a.assignee_ is null)
+            )
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取已办的任务 -->
+    <select id="complateStatusList" resultMap="ProcessInstanceMap">
+        SELECT e.id_,e.PROC_INST_ID_,e.BUSINESS_KEY_,e.proc_def_id_,e.START_TIME_, NULL as END_TIME_, NULL as duration_,
+        e.START_USER_ID_,'' as delete_reason_,e.TENANT_ID_,e.name_,
+        case
+        when v.NAME_='PROCESS_STATUS' and v.TEXT_='CANCEL' then 'CANCEL'
+        when e.end_time_ is not NULL then 'COMPLETE'
+        when e.end_time_ is NULL then 'ACTIVE'
+        end as status
+        FROM act_hi_procinst e LEFT JOIN act_hi_varinst v ON
+        e.id_ = v.PROC_INST_ID_
+        AND v.NAME_ = 'PROCESS_STATUS'
+        AND v.TEXT_ = 'CANCEL'
+        <where>e.id_ IN (SELECT DISTINCT a.PROC_INST_ID_ FROM act_hi_taskinst a LEFT JOIN act_hi_identitylink d ON
+            a.PROC_INST_ID_ = d.PROC_INST_ID_
+            <where>
+                d.TYPE_ = 'participant'
+                AND a.END_TIME_ IS NOT NULL
+                <if test="tenantId != null and tenantId != ''">
+                    AND a.TENANT_ID_ = #{tenantId}
+                </if>
+                 <if test="startUserId != null and startUserId != ''">
+                    AND d.USER_ID_ = #{startUserId}
+                </if>
+            </where>
+            and ((a.assignee_ is not null
+            and a.assignee_ = d.USER_ID_)
+            or a.assignee_ is null) )
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+        </where>
+        ORDER BY e.start_time_ desc limit #{page},#{size}
+    </select>
+
+    <select id="complateStatusTotal" resultType="long">
+        SELECT count(1)
+        FROM act_hi_procinst e
+        <where>e.id_ IN (SELECT DISTINCT a.PROC_INST_ID_ FROM act_hi_taskinst a LEFT JOIN act_hi_identitylink d ON
+            a.PROC_INST_ID_ = d.PROC_INST_ID_
+            <where>
+                d.TYPE_ = 'participant'
+                AND a.END_TIME_ IS NOT NULL
+                <if test="tenantId != null and tenantId != ''">
+                    AND a.TENANT_ID_ = #{tenantId}
+                </if>
+                 <if test="startUserId != null and startUserId != ''">
+                    AND d.USER_ID_ = #{startUserId}
+                </if>
+            </where>
+            and ((a.assignee_ is not null
+            and a.assignee_ = d.USER_ID_)
+            or a.assignee_ is null) )
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

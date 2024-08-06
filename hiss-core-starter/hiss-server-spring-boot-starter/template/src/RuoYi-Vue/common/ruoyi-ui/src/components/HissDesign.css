@@ -1,0 +1,71 @@
+.top .topBox .t-layout__sider .czri-sidebar-layout .czri-side-nav {
+  position: relative;
+}
+.top .topBox .t-layout__sider .t-menu__item {
+  color: #ffffff;
+}
+.top .topBox .t-layout__sider .t-is-active {
+  color: #333333;
+}
+.top .topBox .t-layout__sider {
+  margin-top: 40px;
+}
+.t-layout__sider .czri-sidebar-layout .czri-side-nav {
+  width: 232px !important;
+}
+.top .topBox .czri-sidebar-layout .czri-side-nav .t-menu__operations {
+  margin-bottom: 15px;
+}
+.hp-handler-body .hp-handler-header {
+  padding: 0px 0px;
+  --el-header-padding: 0px 0px;
+}
+.hp-handler-header .el-card__body {
+  padding: 20px 0px;
+}
+#pane-flow,
+#pane-form {
+  height: 80vh;
+}
+.hiss-handler-button {
+  color: #ffffff;
+  border: none;
+  background: #509eff;
+  /*background: linear-gradient(to right, #fa6c9f 0, #ffe140 80%, #ffe140 100%);*/
+  /*-webkit-filter: drop-shadow(0 1px 3px #666666);*/
+}
+#app .sidebar-container .theme-dark .nest-menu{
+  background-color: #1f2d3d !important;
+}
+#app .sidebar-container .theme-dark .el-submenu .el-menu-item {
+  background-color: #1f2d3d !important;
+}
+.el-input--small .el-input__inner {
+  padding: 0px 15px;
+  border:1px solid #C0C4CC;
+}
+.el-form-item--small .el-form-item__label {
+  font-size: 14px !important;
+  line-height:32px !important;
+}
+.el-table th.el-table__cell{
+  background-color: #f8f8f9
+}
+.el-button--mini {
+  padding: 7px 15px;
+  font-size: 12px;
+  border-radius: 3px;
+  height: 30px;
+}
+#app .sidebar-container a {
+  overflow: visible;
+}
+#tab-flow .el-icon{
+  line-height: 40px;
+}
+.formDes .title{
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0px 0px 15px;
+}

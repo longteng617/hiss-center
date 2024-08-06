@@ -1,0 +1,12 @@
+
+hiss:
+  message:
+    tcp:
+      host: #hiss{host}
+      port: #hiss{tcpPort}
+      sender:
+        sources:
+          #hiss{app}:
+            encrypt: false
+            authType: NONE
+            read-timeout: 10000

@@ -1,0 +1,44 @@
+[
+	{
+		type:"menu",
+		menu: {
+	    path: '/flow',
+	    component: "^Layout^",
+	    redirect: 'index',
+	    meta: { title: '审批管理', icon: 'international', "noCache": false},
+	    children: [
+	      {
+	        path: 'index',
+	        component: "^() => import('@/views/process/center/index')^",
+	        name: 'Index',
+	        meta: { title: '发起申请', icon: 'guide', "noCache": false}
+	      },
+	      {
+	        path: 'starter',
+	        component: "^() => import('@/views/process/center/starter/index')^",
+	        name: 'Starter',
+	        meta: { title: '我的申请', icon: 'textarea', "noCache": false}
+	      },
+	      {
+	        path: 'handleActive',
+	        component: "^() => import('@/views/process/center/handle/active')^",
+	        name: 'handleActive',
+	        meta: { title: '我的待办', icon: 'server', "noCache": false}
+	      },
+	      {
+	        path: 'handleBis',
+	        component: "^() => import('@/views/process/center/handle/handleBis')^",
+	        name: 'handleBis',
+	        hidden: true,
+	        meta: { title: '流程办理', icon: 'radio', "noCache": false}
+	      },
+	      {
+	        path: 'handleComplete',
+	        component: "^() => import('@/views/process/center/handle/complete')^",
+	        name: 'handleComplete',
+	        meta: { title: '我的已办', icon: 'dashboard', "noCache": false}
+	      }
+	    ]
+	  }
+	}
+]

@@ -1,0 +1,6 @@
+/Users/dasouche/Downloads/workspace/hiss-center/hiss-center/hiss-core-common/hiss-core-message/hiss-core-message-sender/src/main/java/cn/itcast/hiss/message/sender/MessageSenderManager.java
+/Users/dasouche/Downloads/workspace/hiss-center/hiss-center/hiss-core-common/hiss-core-message/hiss-core-message-sender/src/main/java/cn/itcast/hiss/message/sender/impl/DefaultMessageSenderExecuterImpl.java
+/Users/dasouche/Downloads/workspace/hiss-center/hiss-center/hiss-core-common/hiss-core-message/hiss-core-message-sender/src/main/java/cn/itcast/hiss/message/sender/properties/MessageSenderProperties.java
+/Users/dasouche/Downloads/workspace/hiss-center/hiss-center/hiss-core-common/hiss-core-message/hiss-core-message-sender/src/main/java/cn/itcast/hiss/message/sender/properties/MessageSenderAsyncExecutorProperties.java
+/Users/dasouche/Downloads/workspace/hiss-center/hiss-center/hiss-core-common/hiss-core-message/hiss-core-message-sender/src/main/java/cn/itcast/hiss/message/sender/MessageSenderExecuter.java
+/Users/dasouche/Downloads/workspace/hiss-center/hiss-center/hiss-core-common/hiss-core-message/hiss-core-message-sender/src/main/java/cn/itcast/hiss/message/sender/config/MessageSenderAutoConfiguration.java

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.hiss.process.activiti.mapper.ProcessApplyMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="ProcessInstanceMap" type="cn.itcast.hiss.message.sys.pojo.ProcessInstance">
+        <result column="id_" property="id" />
+        <result column="PROC_INST_ID_" property="procInstId" />
+        <result column="BUSINESS_KEY_" property="businessKey" />
+        <result column="proc_def_id_" property="procDefId" />
+        <result column="START_TIME_" property="startTime" />
+        <result column="END_TIME_" property="endTime" />
+        <result column="duration" property="duration" />
+        <result column="START_USER_ID_" property="startUserId" />
+        <result column="delete_reason_" property="deleteReason" />
+        <result column="TENANT_ID_" property="tenantId" />
+        <result column="name_" property="name" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <!-- 获取激活的用户 -->
+    <select id="activeStatusList" resultMap="ProcessInstanceMap">
+        SELECT e.id_,e.PROC_INST_ID_,e.BUSINESS_KEY_,e.proc_def_id_,e.START_TIME_, NULL as END_TIME_, NULL as duration_,
+               e.START_USER_ID_,'' as delete_reason_,e.TENANT_ID_,e.name_,
+               'ACTIVE' as status
+        FROM act_ru_execution e INNER JOIN act_re_procdef p ON e.proc_def_id_ = p.id_
+        <where>
+            <if test="startUserId != null and startUserId != ''">
+                e.start_user_id_ = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id_ = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+        </where>  ORDER BY e.start_time_ desc limit #{page},#{size}
+    </select>
+    <select id="activeStatusTotal" resultType="long">
+        SELECT count(1)
+        FROM act_ru_execution e INNER JOIN act_re_procdef p ON e.proc_def_id_ = p.id_
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.start_user_id_ = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id_ = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 完成的任务 -->
+    <select id="complateStatusList" resultMap="ProcessInstanceMap">
+        SELECT e.id_,e.PROC_INST_ID_,e.BUSINESS_KEY_,e.proc_def_id_,e.START_TIME_, e.END_TIME_, e.duration_,
+               e.START_USER_ID_,e.delete_reason_,e.TENANT_ID_,e.name_,
+        'COMPLETE' as status
+        FROM act_hi_procinst e LEFT JOIN act_hi_varinst d ON
+        e.id_ = d.PROC_INST_ID_
+        AND d.NAME_ = 'PROCESS_STATUS'
+        AND d.TEXT_ = 'CANCEL'
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.start_user_id_ = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id_ = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+            AND e.end_time_ IS NOT NULL
+            AND d.id_ IS NULL
+        </where>  ORDER BY e.start_time_ DESC limit #{page},#{size}
+    </select>
+    <select id="complateStatusTotal" resultType="long">
+        SELECT count(1)
+        FROM act_hi_procinst e LEFT JOIN act_hi_varinst d ON
+        e.id_ = d.PROC_INST_ID_
+        AND d.NAME_ = 'PROCESS_STATUS'
+        AND d.TEXT_ = 'CANCEL'
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.start_user_id_ = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id_ = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+            AND e.end_time_ IS NOT NULL
+            AND d.id_ IS NULL
+        </where>
+    </select>
+
+    <!-- 取消的任务 -->
+    <select id="cancelStatusList" resultMap="ProcessInstanceMap">
+        SELECT e.id_,e.PROC_INST_ID_,e.BUSINESS_KEY_,e.proc_def_id_,e.START_TIME_, e.END_TIME_, e.duration_,
+               e.START_USER_ID_,e.delete_reason_,e.TENANT_ID_,e.name_,
+        'CANCEL' as status
+        FROM act_hi_procinst e LEFT JOIN act_hi_varinst d ON
+            e.id_ = d.PROC_INST_ID_
+        AND d.NAME_ = 'PROCESS_STATUS'
+        AND d.TEXT_ = 'CANCEL'
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.start_user_id_ = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id_ = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+            AND e.end_time_ IS NOT NULL
+            AND d.id_ IS NOT NULL
+        </where>  ORDER BY e.start_time_ DESC limit #{page},#{size}
+    </select>
+
+    <select id="cancelStatusTotal" resultType="long">
+        SELECT count(1)
+        FROM act_hi_procinst e LEFT JOIN act_hi_varinst d ON
+        e.id_ = d.PROC_INST_ID_
+        AND d.NAME_ = 'PROCESS_STATUS'
+        AND d.TEXT_ = 'CANCEL'
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.start_user_id_ = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id_ = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+            AND e.end_time_ IS NOT NULL
+            AND d.id_ IS NOT NULL
+        </where>
+    </select>
+
+    <!-- 预备任务 -->
+    <select id="prepareStatusList" resultMap="ProcessInstanceMap">
+        SELECT e.id as id_,'' as PROC_INST_ID_, e.BUSINESS_KEY as BUSINESS_KEY_,'' as proc_def_id_,
+        e.created_time as START_TIME_, null as END_TIME_, '' as duration_, e.user_id as START_USER_ID_,
+        '' as delete_reason_,e.tenant_id as TENANT_ID_,e.model_name as name_,
+        'PREPARE' as status
+        FROM hiss_process_pre_launch e
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.user_id = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.model_name like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key like concat('%',#{businessKey},'%')
+            </if>
+        </where>  ORDER BY e.created_time DESC limit #{page},#{size}
+    </select>
+    <select id="prepareStatusTotal" resultType="long">
+        SELECT count(1)
+        FROM hiss_process_pre_launch e
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.user_id = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.model_name like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key like concat('%',#{businessKey},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 全部任务 -->
+    <select id="allStatusList" resultMap="ProcessInstanceMap">
+        SELECT * FROM (SELECT e.id_,e.PROC_INST_ID_,e.BUSINESS_KEY_,e.proc_def_id_,e.START_TIME_, e.END_TIME_,
+        e.duration_, e.START_USER_ID_,e.delete_reason_,e.TENANT_ID_,e.name_,
+        case
+        when d.NAME_='PROCESS_STATUS' and d.TEXT_='CANCEL' then 'CANCEL'
+        when e.end_time_ is not NULL then 'COMPLETE'
+        when e.end_time_ is NULL then 'ACTIVE'
+        end as status
+        FROM act_hi_procinst e LEFT JOIN act_hi_varinst d ON
+        e.id_ = d.PROC_INST_ID_
+        AND d.NAME_ = 'PROCESS_STATUS'
+        AND d.TEXT_ = 'CANCEL'
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.start_user_id_ = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id_ = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+        </where>
+        UNION
+        SELECT e.id as id_,'' as PROC_INST_ID_, e.BUSINESS_KEY as BUSINESS_KEY_,'' as proc_def_id_,
+        e.created_time as START_TIME_, null as END_TIME_, '' as duration_, e.user_id as START_USER_ID_,
+        '' as delete_reason_,e.tenant_id as TENANT_ID_,e.model_name as name_,
+        'PREPARE' as status
+        FROM hiss_process_pre_launch e
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.user_id = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.model_name like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key like concat('%',#{businessKey},'%')
+            </if>
+        </where>) m  ORDER BY m.START_TIME_ DESC limit #{page},#{size}
+    </select>
+
+    <select id="allStatusTotal" resultType="long">
+        SELECT count(1) FROM (SELECT e.id_
+        FROM act_hi_procinst e LEFT JOIN act_hi_varinst d ON
+        e.id_ = d.PROC_INST_ID_
+        AND d.NAME_ = 'PROCESS_STATUS'
+        AND d.TEXT_ = 'CANCEL'
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.start_user_id_ = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id_ = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.name_ like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key_ like concat('%',#{businessKey},'%')
+            </if>
+        </where>
+        UNION
+        SELECT e.id as id_
+        FROM hiss_process_pre_launch e
+        <where>
+             <if test="startUserId != null and startUserId != ''">
+                e.user_id = #{startUserId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                AND e.tenant_id = #{tenantId}
+            </if>
+            <if test="name != null and name != ''">
+                AND e.model_name like concat('%',#{name},'%')
+            </if>
+            <if test="businessKey != null and businessKey != ''">
+                AND e.business_key like concat('%',#{businessKey},'%')
+            </if>
+        </where>) m
+    </select>
+
+</mapper>

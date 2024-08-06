@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.hiss.form.mapper.DynamicTableMapper">
+
+    <sql id="conditional">
+        <where>
+            1=1
+            <if test="formData.search !=null ">
+            <foreach collection="formData.search" item="val" index="index">
+                <if test="val.fieldName != null and val.fieldValue !=null and (val.type=='EQ' or val.type==null)">
+                    and `${val.fieldName}` = #{val.fieldValue}
+                </if>
+
+                <if test="val.fieldName != null and val.fieldValue !=null and val.type=='GT'">
+                    and `${val.fieldName}` &gt; #{val.fieldValue}
+                </if>
+
+                <if test="val.fieldName != null and val.fieldValue !=null and val.type=='GTE'">
+                    and `${val.fieldName}` &gt;= #{val.fieldValue}
+                </if>
+
+                <if test="val.fieldName != null and val.fieldValue !=null and val.type=='LT'">
+                    and `${val.fieldName}` &lt; #{val.fieldValue}
+                </if>
+
+                <if test="val.fieldName != null and val.fieldValue !=null and val.type=='LTE'">
+                    and `${val.fieldName}` &lt;= #{val.fieldValue}
+                </if>
+
+                <if test="val.fieldName != null and val.fieldValue !=null and val.type=='LIKE'">
+                    and `${val.fieldName}` like concat('%',#{val.fieldValue},'%')
+                </if>
+
+                <if test="val.fieldName != null and val.fieldValue !=null and val.fieldValue2 !=null and val.type=='BETWEEN'">
+                    and `${val.fieldName}` between #{val.fieldValue} and #{val.fieldValue2}
+                </if>
+            </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <insert id="copyRowData" >
+        INSERT INTO `${table.tablePhysicalName}`
+        (`id`,`created_time`,`parent_id`,`user_id`,`table_id`,`form_id`,
+        <foreach collection="fields" item="field" separator=",">
+            `${field.physicalName}`
+        </foreach>)
+        SELECT #{newDataId}, now(), #{parentId}, user_id,table_id,form_id,
+        <foreach collection="fields" item="field" separator=",">
+            `${field.physicalName}`
+        </foreach>
+        FROM `${table.tablePhysicalName}`
+        WHERE id=#{oldDataId};
+    </insert>
+
+    <!-- 获取列表数据 -->
+    <select id="listTableDataForPage" resultType="map">
+        select * from `${table.tablePhysicalName}`
+        <include refid="conditional"/>
+        ORDER BY created_time desc limit #{formData.current},#{formData.pageSize}
+    </select>
+    <select id="countTableDataForPage" resultType="java.lang.Long">
+        select count(1) from `${table.tablePhysicalName}`
+        <include refid="conditional"/>
+    </select>
+
+</mapper>

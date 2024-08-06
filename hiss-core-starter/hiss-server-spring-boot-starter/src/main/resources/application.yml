@@ -1,0 +1,77 @@
+server:
+    port: 8081
+
+ip: 192.168.20.101 # 替换成你的数据库IP
+
+spring:
+  activiti:
+    deployment-mode: never-fail
+    db-history-used: true
+    check-process-definitions: false # 关闭自动部署
+    history-level: full
+    database-schema-update: true
+  application:
+    name: hiss-server-spring-boot-starter
+  datasource:
+    password: 87sdhf298TYUUIz2! #替换成你的Mysql密码
+    username: root #替换成你的Mysql用户
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${ip}:3306/hiss-demo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+
+mybatis-plus:
+  type-aliases-package: cn.itcast.hiss.server.pojos
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#logging:
+#  level:
+#    com.miukoo: info
+#    org.activiti.engine.impl.persistence.entity: info
+#    org.activiti.engine.impl.persistence.entity.JobEntity: info  #定时任务
+#    org.activiti.engine.impl.persistence.entity.JobEntityImpl: info  #定时任务
+#    org.activiti.engine.impl.persistence.entity.JobEntityManager: info  #定时任务
+#    org.activiti.engine.impl.persistence.entity.JobEntityManagerImpl: info  #定时任务
+
+hiss:
+  message:
+    mail:
+      servers:
+        zhyl_app:
+          mail-server-host: smtp.126.com
+          mail-server-port: 465
+          mail-server-use-tLS: true
+          mail-server-use-sSL: true
+          mail-server-username: ${EMAIL} # 替换成你的邮箱
+          mail-server-password: ${EMAIL_PASSWORD} #替换成你的授权密码
+    tcp:
+      port: 10003
+      #port: 10004
+      receiver:
+        sources:
+          tenant_hiss:
+            encrypt: false
+            authType: NONE
+          zhyl_app:
+            encrypt: false
+            authType: NONE
+
+    http:
+      receiver:
+        sources:
+          tenant_hiss:
+            encrypt: false
+            authType: HUTOOL_JWT
+            exclude-auth-ids:
+              - SYSTEM_USER_LOGIN
+          zhyl_app:
+            encrypt: false
+            authType: NONE
+            token-key: $2a$10$PVtHnkj86mJgf6li/yron.LRx/cQAlaiZkBJ9BeogCNTryXJRT1YC
+  scaffold:
+    systems:
+      ruoyi:
+        templatePath: ${basedir}/template/src
+        tempPath: ${basedir}/template/version/ruoyi
+      yanglao:
+        templatePath: ${basedir}/template/src
+        tempPath: ${basedir}/template/version/yanglao

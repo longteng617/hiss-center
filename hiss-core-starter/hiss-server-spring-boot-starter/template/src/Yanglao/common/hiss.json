@@ -1,0 +1,126 @@
+[
+	{
+		type: 'appendAndReplace',
+		file:'/zhyl/easy-zhyl-web/src/main/resources/application.yml',
+	},
+	{
+		type: 'replaceFile',
+		file:'/zhyl/easy-zhyl-web/pom.xml',
+		src:'</dependencies>',
+		rep:"  <dependency>
+      <groupId>com.zhyl</groupId>
+      <artifactId>process-client</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+  </dependencies>"
+	},
+	{
+		type: 'replaceFile',
+		file:'/zhyl/pom.xml',
+		src:'<dependencies>',
+		rep:"<dependencies>
+					<dependency>
+                <groupId>cn.itcast</groupId>
+                <artifactId>hiss-center</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>"
+	},
+	{
+		type: 'replaceFile',
+		file:'/zhyl/pom.xml',
+		src:'</modules>',
+		rep:"    <module>process-client</module>
+    </modules>"
+	},
+	{
+		type: 'replaceFile',
+		file:'/project-zhyl-admin-vue3-java/src/constants/index.ts',
+		src:'// 合同状态枚举',
+		rep:"export const HISS_BASE_URL = 'http://172.16.43.97:8081/'
+// 合同状态枚举"
+	},
+	{
+		type: 'replaceFile',
+		file:'/project-zhyl-admin-vue3-java/src/store/modules/user.ts',
+		src:'this.token = `${token}`',
+		rep:"localStorage.setItem(PROCESS_HEADER_TOKEN_NAME, token)
+      this.token = `${token}`"
+	},
+	{
+		type: 'replaceFile',
+		file:'/project-zhyl-admin-vue3-java/src/store/modules/user.ts',
+		src:"import { TOKEN_NAME } from '@/config/global'",
+		rep:"import {
+  TOKEN_NAME,
+  PROCESS_HEADER_TOKEN_NAME,
+  PROCESS_AUTH_USER
+} from '@/config/global'"
+	},
+	{
+		type: 'replaceFile',
+		file:'/project-zhyl-admin-vue3-java/src/store/modules/user.ts',
+		src:'this.userInfo = data',
+		rep:"const hissProcessUser = {
+        userId: data.uid,
+        userName: data.username,
+        appId: \"zhyl_app\"
+      }
+      localStorage.setItem(PROCESS_AUTH_USER, JSON.stringify(hissProcessUser))
+      this.userInfo = data"
+	},
+	{
+		type: 'replaceFile',
+		file:'/project-zhyl-admin-vue3-java/src/utils/commonData.ts',
+		src:'// 取消原因',
+		rep:"export const hissProcessStatus = [
+  {
+    id: null,
+    value: '全部'
+  },
+  {
+    id: 'PREPARE',
+    value: '待发起'
+  },
+  {
+    id: 'ACTIVE',
+    value: '办理中'
+  },
+  {
+    id: 'COMPLETE',
+    value: '已完成'
+  },
+  {
+    id: 'CANCEL',
+    value: '已取消'
+  }
+]"
+	},
+	{
+		type: 'replaceFile',
+		file:'/project-zhyl-admin-vue3-java/src/pages/login/components/Login.vue',
+		src:"userStore.setUserInfo(res.data)",
+		rep:"const data = { uid: res.data.id, username: res.data.realName }
+        userStore.setUserInfo(data)"
+	},
+	{
+		type: 'replaceFile',
+		file:'/project-zhyl-admin-vue3-java/src/pages/login/components/Login.vue',
+		src:"// tab切换数据",
+		rep:"import normalRouter from '@/router/modules/components'
+// tab切换数据"
+	},
+	{
+		type: 'replaceFile',
+		file:'/project-zhyl-admin-vue3-java/src/pages/login/components/Login.vue',
+		src:"await userStore.setRoute(res.data)",
+		rep:"let temp = res.data
+          for (let i = 0; i < normalRouter.length; i++) {
+            if (normalRouter[i].name === 'flow') {
+              temp.push(normalRouter[i])
+            }
+          }
+          await userStore.setRoute(temp)"
+	}
+]

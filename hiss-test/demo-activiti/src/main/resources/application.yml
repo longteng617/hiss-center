@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+spring:
+  activiti:
+    database-schema-update: true #自动创建数据库
+    db-history-used: true # 开启流程历史记录
+    history-level: full # 历史流程数据全部记录到历史表中，支持none、activity、audit、full，4种粒度的数据，常用的就是full
+
+  datasource:
+      password: 1234qwer
+      username: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      # url中的nullCatalogMeansCurrent参数需要设置成true，表示Activiti优先在url中指定的数据库中检查是否有创建过表，如果为false，则会遍历整个数据源中的每个数据库，检查是否有创建过activiti的表
+      url: jdbc:mysql://127.0.0.1:3306/demo-activiti?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true
+
+  main:
+    allow-bean-definition-overriding: true
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

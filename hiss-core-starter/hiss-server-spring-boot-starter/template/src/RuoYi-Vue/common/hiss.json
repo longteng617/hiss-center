@@ -1,0 +1,50 @@
+[
+	{
+		type:"replaceFile",
+		file:'/ruoyi-ui/src/store/modules/user.js',
+		src:'const user = res.user',
+		rep:"const user = res.user
+          const hissProcessUser = {
+            userId: user.userId,
+            userName: user.userName,
+            appId: '#hiss{app}'
+          }
+          localStorage.setItem('hiss_user', JSON.stringify(hissProcessUser))"
+	},
+	{
+		type: 'appendAndReplace',
+		file:'/ruoyi-admin/src/main/resources/application.yml',
+	},
+	{
+		type: 'replaceParams',
+		file:'ruoyi-ui/src/constants/index.js',
+	},
+	{
+		type: 'replaceFile',
+		file:'/ruoyi-admin/pom.xml',
+		src:'<!-- spring-boot-devtools -->',
+		rep:"<dependency>
+            <groupId>cn.itcast</groupId>
+            <artifactId>hiss-api-web-oa</artifactId>
+            <version>#hiss{version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.31</version>
+        </dependency>"
+	},
+	{
+		type: 'replaceFile',
+		file:'/pom.xml',
+		src:'<!-- SpringBoot的依赖配置-->',
+		rep:"<dependency>
+                <groupId>cn.itcast</groupId>
+                <artifactId>hiss-center</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- SpringBoot的依赖配置-->"
+	}
+]

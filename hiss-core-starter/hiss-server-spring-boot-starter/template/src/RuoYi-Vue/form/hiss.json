@@ -1,0 +1,19 @@
+[
+	{
+		type:"menu",
+		menu: {
+    path: '/design',
+    component: "^Layout^",
+    redirect: 'index',
+    meta: { title: '流程管理', icon: 'excel', "noCache": false},
+    children: [
+      {
+        path: 'form',
+        component: "^() => import('@/views/process/center/form/index')^",
+        name: 'Form',
+        meta: { title: '表单管理', icon: 'date', "noCache": false}
+      }
+    ]
+  }
+	 }
+]

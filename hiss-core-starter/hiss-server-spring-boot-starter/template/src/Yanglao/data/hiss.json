@@ -1,0 +1,26 @@
+[
+  {
+    type:"menu",
+    menu:{
+    path: '/flow',
+    name: 'flow',
+    component: "^Layout^",
+    redirect: '/flow/index',
+    meta: {
+      title: '流程中心',
+      single: true
+    },
+    children: [
+      {
+        path: 'data-#hiss{dataId}',
+        name: 'Data-#hiss{dataId}',
+        component: "^() => import('@/pages/form/FormSdk.vue')^",
+        meta: {
+          title: '#hiss{dataName}',
+          params: { id: '#hiss{dataId}', appId: '#hiss{app}' }
+        }
+      }
+    ]
+  }
+  }
+]

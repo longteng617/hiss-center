@@ -1,0 +1,20 @@
+[
+  {
+    type:"menu",
+    menu: {
+      path: '/hiss-#hiss{groupId}',
+      component: "^Layout^",
+      meta: { title: '#hiss{groupName}', icon: 'excel', "noCache": false},
+      children: [
+        {
+          path: 'data-#hiss{dataId}',
+          component: "^() => import('@/views/form/FormSdk')^",
+          name: 'Data-#hiss{dataId}',
+          meta: { title: '#hiss{dataName}', icon: 'dashboard', affix: true, "noCache": false,
+            params: { id: '#hiss{dataId}', appId: '#hiss{app}' }
+          }
+        }
+      ]
+    }
+  }
+]

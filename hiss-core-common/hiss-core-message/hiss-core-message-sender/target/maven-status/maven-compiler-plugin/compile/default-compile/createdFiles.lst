@@ -1,0 +1,8 @@
+cn/itcast/hiss/message/sender/properties/MessageSenderAsyncExecutorProperties.class
+META-INF/spring-configuration-metadata.json
+cn/itcast/hiss/message/sender/properties/MessageSenderProperties.class
+cn/itcast/hiss/message/sender/MessageSenderManager.class
+cn/itcast/hiss/message/sender/MessageSenderManager$1.class
+cn/itcast/hiss/message/sender/impl/DefaultMessageSenderExecuterImpl.class
+cn/itcast/hiss/message/sender/MessageSenderExecuter.class
+cn/itcast/hiss/message/sender/config/MessageSenderAutoConfiguration.class
